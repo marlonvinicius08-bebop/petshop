@@ -1,0 +1,20 @@
+{
+  "name": "petshop-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start:gateway": "node src/gateway/main.js",
+    "start:pet": "node src/domains/pet/main.js",
+    "start:agenda": "node src/domains/agenda/main.js",
+    "start:financeiro": "node src/domains/financeiro/main.js",
+    "test": "node --test test/*.test.js",
+    "test:coverage": "node --test --experimental-test-coverage test/*.test.js"
+  },
+  "dependencies": {
+    "pg": "8.16.3"
+  }
+}

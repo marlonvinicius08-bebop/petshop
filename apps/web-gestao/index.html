@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestão — Petshop</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="container topbar">
+    <a class="brand" href="/">🐾 Petshop Gestão</a>
+    <nav><a href="/">Página pública</a></nav>
+  </header>
+  <main class="container dashboard">
+    <p class="eyebrow">Acesso administrativo</p>
+    <h1>Visão financeira</h1>
+    <div class="dashboard-grid">
+      <aside class="panel">
+        <form id="form-token">
+          <label>Token administrativo
+            <input id="token" type="password" autocomplete="off" required>
+          </label>
+          <button type="submit">Consultar</button>
+        </form>
+        <p id="status" class="status" aria-live="polite"></p>
+      </aside>
+      <section class="grid" id="resumo" aria-live="polite">
+        <article class="card"><h2>Receitas</h2><p>—</p></article>
+        <article class="card"><h2>Despesas</h2><p>—</p></article>
+        <article class="card"><h2>Saldo</h2><p>—</p></article>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+

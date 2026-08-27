@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Serviços e cuidados para o seu pet.">
+  <title>Petshop — cuidado de verdade</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="container topbar">
+    <a class="brand" href="/">🐾 Petshop</a>
+    <nav aria-label="Navegação principal">
+      <a href="#servicos">Serviços</a>
+      <a href="/cliente/">Área do cliente</a>
+      <a href="/gestao/">Gestão</a>
+    </nav>
+  </header>
+  <main>
+    <section class="container hero">
+      <div>
+        <p class="eyebrow">Bem-estar em primeiro lugar</p>
+        <h1>Seu pet merece cuidado completo.</h1>
+        <p class="lead">Serviços pensados para uma rotina mais saudável, tranquila e feliz ao lado do seu melhor amigo.</p>
+        <div class="actions">
+          <a class="button" href="/cliente/">Acessar minha área</a>
+          <a class="button secondary" href="#servicos">Conhecer serviços</a>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="Ilustração de um pet">🐶</div>
+    </section>
+    <section id="servicos" class="container">
+      <p class="eyebrow">Nossos serviços</p>
+      <h2>Cuidado para cada momento</h2>
+      <div id="lista-servicos" class="grid" aria-live="polite">
+        <article class="card"><p>Carregando serviços…</p></article>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <footer>© 2026 Petshop. Carinho, segurança e transparência.</footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,7 @@
+.git
+.gitignore
+node_modules
+secrets
+tests
+GUIA_IMPLEMENTACAO_ARQUITETURA.md*
+

@@ -1,0 +1,269 @@
+name: petshop
+
+x-service-security: &service-security
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp:size=32m,noexec,nosuid
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  deploy:
+    resources:
+      limits:
+        cpus: "0.50"
+        memory: 256M
+
+x-api-common: &api-common
+  <<: *service-security
+  build:
+    context: .
+    dockerfile: infra/api/Dockerfile
+  environment:
+    HTTP_PORT: "3000"
+    LOG_LEVEL: info
+    INTERNAL_SECRET_FILE: /run/secrets/internal_service_secret
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_NAME: petshop
+  secrets:
+    - internal_service_secret
+  healthcheck:
+    test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+    interval: 15s
+    timeout: 3s
+    retries: 5
+    start_period: 10s
+
+x-web-common: &web-common
+  <<: *service-security
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+    interval: 15s
+    timeout: 3s
+    retries: 3
+
+services:
+  reverse-proxy:
+    <<: *service-security
+    image: nginxinc/nginx-unprivileged:1.27-alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./infra/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - network_public
+      - network_front
+      - network_gateway
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+      web-publica:
+        condition: service_healthy
+      web-cliente:
+        condition: service_healthy
+      web-gestao:
+        condition: service_healthy
+
+  web-publica:
+    <<: *web-common
+    build:
+      context: .
+      dockerfile: infra/web/Dockerfile
+      args:
+        WEB_APP: web-publica
+    networks:
+      - network_front
+
+  web-cliente:
+    <<: *web-common
+    build:
+      context: .
+      dockerfile: infra/web/Dockerfile
+      args:
+        WEB_APP: web-cliente
+    networks:
+      - network_front
+
+  web-gestao:
+    <<: *web-common
+    build:
+      context: .
+      dockerfile: infra/web/Dockerfile
+      args:
+        WEB_APP: web-gestao
+    networks:
+      - network_front
+
+  api-gateway:
+    <<: *api-common
+    command: ["node", "src/gateway/main.js"]
+    environment:
+      HTTP_PORT: "3000"
+      LOG_LEVEL: info
+      RATE_LIMIT_MAX: "100"
+      RATE_LIMIT_WINDOW_MS: "60000"
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      INTERNAL_SECRET_FILE: /run/secrets/internal_service_secret
+      PET_API_URL: http://api-pet:3000
+      AGENDA_API_URL: http://api-agenda:3000
+      FINANCEIRO_API_URL: http://api-financeiro:3000
+    secrets:
+      - jwt_secret
+      - internal_service_secret
+    networks:
+      - network_gateway
+      - network_pet
+      - network_agenda
+      - network_financeiro
+    depends_on:
+      api-pet:
+        condition: service_healthy
+      api-agenda:
+        condition: service_healthy
+      api-financeiro:
+        condition: service_healthy
+
+  api-pet:
+    <<: *api-common
+    command: ["node", "src/domains/pet/main.js"]
+    environment:
+      HTTP_PORT: "3000"
+      SERVICE_NAME: api-pet
+      INTERNAL_SECRET_FILE: /run/secrets/internal_service_secret
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: petshop
+      DB_USER: app_pet
+      DB_PASSWORD_FILE: /run/secrets/pet_db_password
+    secrets:
+      - internal_service_secret
+      - pet_db_password
+    networks:
+      - network_pet
+      - database_pet
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api-agenda:
+    <<: *api-common
+    command: ["node", "src/domains/agenda/main.js"]
+    environment:
+      HTTP_PORT: "3000"
+      SERVICE_NAME: api-agenda
+      INTERNAL_SECRET_FILE: /run/secrets/internal_service_secret
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: petshop
+      DB_USER: app_agenda
+      DB_PASSWORD_FILE: /run/secrets/agenda_db_password
+    secrets:
+      - internal_service_secret
+      - agenda_db_password
+    networks:
+      - network_agenda
+      - database_agenda
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api-financeiro:
+    <<: *api-common
+    command: ["node", "src/domains/financeiro/main.js"]
+    environment:
+      HTTP_PORT: "3000"
+      SERVICE_NAME: api-financeiro
+      INTERNAL_SECRET_FILE: /run/secrets/internal_service_secret
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: petshop
+      DB_USER: app_financeiro
+      DB_PASSWORD_FILE: /run/secrets/financeiro_db_password
+    secrets:
+      - internal_service_secret
+      - financeiro_db_password
+    networks:
+      - network_financeiro
+      - database_financeiro
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: petshop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+      - pet_db_password
+      - agenda_db_password
+      - financeiro_db_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - database_pet
+      - database_agenda
+      - database_financeiro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d petshop"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 512M
+
+networks:
+  network_public: {}
+  network_front:
+    internal: true
+  network_gateway:
+    internal: true
+  network_pet:
+    internal: true
+  network_agenda:
+    internal: true
+  network_financeiro:
+    internal: true
+  database_pet:
+    internal: true
+  database_agenda:
+    internal: true
+  database_financeiro:
+    internal: true
+
+volumes:
+  postgres_data: {}
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password
+  pet_db_password:
+    file: ./secrets/pet_db_password
+  agenda_db_password:
+    file: ./secrets/agenda_db_password
+  financeiro_db_password:
+    file: ./secrets/financeiro_db_password
+  jwt_secret:
+    file: ./secrets/jwt_secret
+  internal_service_secret:
+    file: ./secrets/internal_service_secret
+

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Área do cliente — Petshop</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="container topbar">
+    <a class="brand" href="/">🐾 Petshop</a>
+    <nav><a href="/">Página pública</a></nav>
+  </header>
+  <main class="container dashboard">
+    <p class="eyebrow">Área protegida</p>
+    <h1>Meus pets</h1>
+    <div class="dashboard-grid">
+      <aside class="panel">
+        <h2>Acesso</h2>
+        <form id="form-token">
+          <label>Token de acesso
+            <input id="token" type="password" autocomplete="off" required>
+          </label>
+          <button type="submit">Entrar</button>
+        </form>
+        <button id="sair" class="hidden" type="button">Sair</button>
+        <p id="status" class="status" aria-live="polite"></p>
+      </aside>
+      <section class="panel">
+        <h2>Pets cadastrados</h2>
+        <ul id="pets" class="list"><li>Informe seu token para consultar os dados.</li></ul>
+        <h2>Novo pet</h2>
+        <form id="form-pet">
+          <label>Nome <input name="nome" maxlength="100" required></label>
+          <label>Espécie <input name="especie" maxlength="50" required></label>
+          <button type="submit">Cadastrar pet</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+

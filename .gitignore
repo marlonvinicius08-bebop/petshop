@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/.gitkeep
+coverage/
+*.log
+*:Zone.Identifier
+
