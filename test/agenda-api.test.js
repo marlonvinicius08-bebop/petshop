@@ -57,4 +57,3 @@ test('Agenda não persiste agendamento com UUID ou horário inválido', async ()
     assert.equal(persisted, false);
   });
 });
-

@@ -17,4 +17,3 @@ test('servidor expõe métricas sem registrar dados sensíveis', async () => {
     assert.doesNotMatch(metrics, /segredo-que-nao-pode-vazar/);
   });
 });
-

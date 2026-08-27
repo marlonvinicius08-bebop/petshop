@@ -20,4 +20,3 @@ create_secret jwt_secret
 create_secret internal_service_secret
 
 printf 'Segredos locais criados em %s (não versionados).\n' "$secrets_dir"
-

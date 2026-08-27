@@ -95,4 +95,3 @@ export function createGatewayHandler({
     return upstream.status;
   };
 }
-

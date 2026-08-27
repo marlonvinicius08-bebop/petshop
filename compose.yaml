@@ -266,4 +266,3 @@ secrets:
     file: ./secrets/jwt_secret
   internal_service_secret:
     file: ./secrets/internal_service_secret
-

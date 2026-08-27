@@ -21,4 +21,3 @@ export function futureDate(value, field) {
   }
   return date;
 }
-

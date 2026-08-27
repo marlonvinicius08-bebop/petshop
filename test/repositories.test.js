@@ -38,4 +38,3 @@ test('repositório Financeiro calcula resumo sem receber SQL do usuário', async
   assert.equal(typeof pool.calls[0], 'string');
   assert.match(pool.calls[0], /FROM financeiro\.lancamentos/);
 });
-

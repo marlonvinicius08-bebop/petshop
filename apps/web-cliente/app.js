@@ -67,4 +67,3 @@ logout.addEventListener('click', () => {
 });
 
 if (accessToken) await loadPets();
-

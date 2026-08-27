@@ -14,4 +14,3 @@ export function createDatabasePool(env = process.env) {
     application_name: env.SERVICE_NAME,
   });
 }
-

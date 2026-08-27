@@ -32,4 +32,3 @@ const handler = createGatewayHandler({
 });
 
 listen(createHttpServer({ serviceName: 'api-gateway', logger, handler }), port, logger);
-

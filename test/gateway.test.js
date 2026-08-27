@@ -61,4 +61,3 @@ test('rate limit bloqueia excesso de requisições', async () => {
     assert.equal((await fetch(`${baseUrl}/api/publico/servicos`)).status, 429);
   });
 });
-

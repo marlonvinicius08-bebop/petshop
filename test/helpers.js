@@ -25,4 +25,3 @@ export function createJwt(payload, secret) {
   const signature = createHmac('sha256', secret).update(`${header}.${body}`).digest('base64url');
   return `${header}.${body}.${signature}`;
 }
-

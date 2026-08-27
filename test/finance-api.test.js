@@ -37,4 +37,3 @@ test('Financeiro permite resumo somente para gestão', async () => {
     assert.deepEqual((await allowed.json()).data, { receitas: '100.00', despesas: '25.00', saldo: '75.00' });
   });
 });
-

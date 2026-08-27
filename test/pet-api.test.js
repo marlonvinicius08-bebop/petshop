@@ -55,4 +55,3 @@ test('cadastro de pet valida entrada antes de persistir', async () => {
     assert.equal(persisted, false);
   });
 });
-

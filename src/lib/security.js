@@ -92,4 +92,3 @@ export function verifyInternalRequest(request, secret, nowMs = Date.now()) {
   }
   return { id: fields.userId, role: fields.role };
 }
-

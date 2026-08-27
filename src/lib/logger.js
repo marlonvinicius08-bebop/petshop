@@ -22,4 +22,3 @@ export function createLogger(service, minimumLevel = 'info', output = console) {
     error: (event, fields) => write('error', event, fields),
   };
 }
-

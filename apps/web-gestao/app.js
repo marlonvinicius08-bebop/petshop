@@ -38,4 +38,3 @@ form.addEventListener('submit', async (event) => {
     status.textContent = error.message;
   }
 });
-

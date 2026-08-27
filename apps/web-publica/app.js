@@ -22,4 +22,3 @@ try {
   status.className = 'status error';
   status.textContent = error.message;
 }
-

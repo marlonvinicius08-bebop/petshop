@@ -10,4 +10,3 @@ const pool = createDatabasePool(process.env);
 const internalSecret = readSecret({ value: process.env.INTERNAL_SECRET, file: process.env.INTERNAL_SECRET_FILE, name: 'INTERNAL_SECRET' });
 const handler = createAgendaHandler({ repository: createAgendaRepository(pool), internalSecret });
 listen(createHttpServer({ serviceName: 'api-agenda', logger, handler }), integerFromEnv(process.env.HTTP_PORT, 3000, 'HTTP_PORT'), logger);
-

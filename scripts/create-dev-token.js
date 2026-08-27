@@ -19,4 +19,3 @@ const payload = Buffer.from(JSON.stringify({
 const signature = createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
 
 console.log(`${header}.${payload}.${signature}`);
-

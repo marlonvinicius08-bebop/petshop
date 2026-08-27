@@ -73,4 +73,3 @@ Os tokens duram uma hora. Em um ambiente real, devem ser emitidos por um provedo
 ## Próximas evoluções
 
 Esta primeira entrega estabelece a fundação funcional. Os próximos incrementos previstos pelo guia são integração com provedor de identidade, migrações versionadas por release, persistência de auditoria, coleta centralizada de logs e métricas, alertas e expansão dos domínios conforme necessidades funcionais documentadas.
-

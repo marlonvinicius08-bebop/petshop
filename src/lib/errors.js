@@ -6,4 +6,3 @@ export class HttpError extends Error {
     this.code = code;
   }
 }
-

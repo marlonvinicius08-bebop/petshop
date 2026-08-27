@@ -21,4 +21,3 @@ export class Metrics {
     return `${lines.join('\n')}\n`;
   }
 }
-

@@ -33,4 +33,3 @@ test('assinatura interna muda quando identidade ou rota muda', () => {
   const changed = internalHeaders({ ...base, path: '/resumo' }, 'segredo')['x-service-signature'];
   assert.notEqual(original, changed);
 });
-

@@ -43,4 +43,3 @@ export function createPetHandler({ repository, internalSecret }) {
     throw new HttpError(404, 'route_not_found', 'Rota não encontrada');
   };
 }
-
